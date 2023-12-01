@@ -1,0 +1,236 @@
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+
+<body>
+  <h2>Dashboard</h2>
+  <div>
+    <div class="row">
+      <div class="col col-3">
+        <div id="cards" class="ml-3 mr-5 mt-5">
+          <div class="card w-70 mb-3">
+            <div class="card-body">
+              <p class="card-title">Donation Amount</p>
+              {% if total_donation_amount < 10000 %}
+                <p class="card-text display-4 mt-5">${{ total_donation_amount }}</p>
+              {% else %}
+                <p class="card-text display-4 mt-5">${{ total_donation_amount_K }}K</p>
+              {% endif %}
+              
+              <p class="card-text">YTD</p>
+            </div>
+          </div>
+        
+          <div class="card w-70 mb-3">
+            <div class="card-body">
+              <p class="card-title">Donation Count</p>
+              <p class="card-text display-4 mt-5">{{donation_count}}</p>
+              <p class="card-text">YTD</p>
+            </div>
+          </div>
+        
+          <div class="card mb-3">
+            <div class="card-body">
+              <p class="card-title">Membership Count</p>
+              <p class="card-text display-4 mt-5">{{user_count}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div id="charts" class="mr-3">
+          <div class="row my-5 align-items-center g-5">
+            <div class="col">
+              <canvas id="areaChart" width="500" height="300"></canvas>
+            </div>
+            <div class="col">
+              <canvas id="doubleColmunChart" width="500" height="300"></canvas>
+            </div>
+          </div>
+
+          <div class="row my-5 align-items-center g-5">
+            <div class="col">
+              <canvas id="colmunChart" width="500" height="300"></canvas>
+            </div>
+            <div class="col">
+              <canvas id="myChart" width="500" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  <script>
+    var bgColorGreen = 'rgba(75, 192, 192, 0.2)';
+    var colorGreen = 'rgba(75, 192, 192, 1)';
+
+    var bgColorRed = 'rgba(255, 99, 132, 0.2)';
+    var colorRed = 'rgba(255, 99, 132, 1)';
+
+    //line chart
+    var chartData = JSON.parse('{{ line_chart_data_json|safe }}');
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.labels,
+            datasets: [{
+                label: 'Donation by Year',
+                data: chartData.data_set,
+                borderColor: colorGreen,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+              title: {
+                display: true,
+                text: 'Donation Trends Over the Years',
+              },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+    // column chart
+    var colmunChartData = JSON.parse('{{ column_chart_data_json|safe }}');
+    var ctx1 = document.getElementById('colmunChart').getContext('2d');
+
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: colmunChartData.labels,
+            datasets: [{
+                label: 'Donation Amount',
+                data: colmunChartData.data_current_year,
+                backgroundColor: bgColorGreen,
+                borderColor: colorGreen,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                  display: true,
+                  text: 'Donation Amount by Category',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                }
+            }
+        }
+    });
+
+
+    // double column chart
+    var colmunChartData = JSON.parse('{{ double_column_chart_data_json|safe }}');
+    var ctx2 = document.getElementById('doubleColmunChart').getContext('2d');
+
+    new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: colmunChartData.labels,
+            datasets: [{
+            label: 'Current Year',
+            data: colmunChartData.data_current_year,
+            backgroundColor: bgColorGreen,
+            borderColor: colorGreen,
+            borderWidth: 1,
+        }, {
+            label: 'Previous Year',
+            data: colmunChartData.data_last_year,
+            backgroundColor: bgColorRed,
+            borderColor: colorRed,
+            borderWidth: 1,
+        }]
+        },
+        options: {
+            plugins: {
+                  title: {
+                    display: true,
+                    text: 'Comparison of Current and Previous Year Donation Count',
+                  },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                    }
+                }
+            },
+            barPercentage: 0.95, 
+            categoryPercentage: 0.7, 
+        }
+    });
+
+
+    //area line chart
+    var areaChartData = JSON.parse('{{ area_chart_data_json|safe }}');
+    var ctx3 = document.getElementById('areaChart').getContext('2d');
+    new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: areaChartData.labels,
+            datasets: [{
+                label: 'Current Year',
+                data: areaChartData.data_series1,
+                fill: true, 
+                backgroundColor: bgColorGreen,
+                borderColor: colorGreen,
+                borderWidth: 1
+            }, {
+                label: 'Previous Year',
+                data: areaChartData.data_series2,
+                fill: true, 
+                backgroundColor: bgColorRed,
+                borderColor: colorRed,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                title: {
+                  display: true,
+                  text: 'Comparison of Current and Previous Year Donation Amount',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+                x: {
+                    grid: {
+                          // display: false,
+                    },
+                }
+            }
+        }
+    });
+
+  </script>
+
+</body>
+</html>
+{% endblock content %}
