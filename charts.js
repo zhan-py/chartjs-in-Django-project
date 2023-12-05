@@ -4,6 +4,8 @@
     var bgColorRed = 'rgba(255, 99, 132, 0.2)';
     var colorRed = 'rgba(255, 99, 132, 1)';
 
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
     //line chart
     var chartData = {
         "labels": [2020, 2021, 2022, 2023],
@@ -83,7 +85,7 @@
 
     // double column chart
     var colmunChartData = {
-        "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], 
+        "labels": MONTHS, 
         "data_current_year": [1, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2], 
         "data_last_year": [1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2]
     }
@@ -131,7 +133,7 @@
 
     //area line chart
     var areaChartData = {
-        "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], 
+        "labels": MONTHS, 
         "data_series1": [8000.0, 7000.0, 7000.0, 5000.0, 11000.0, 9000.0, 8000.0, 10000.0, 7000.0, 5000.0, 13000.0], 
         "data_series2": [5000.0, 6000.0, 7000.0, 6000.0, 5000.0, 7000.0, 5000.0, 10000.0, 9000.0, 6000.0, 4000.0, 9000.0]
     }
