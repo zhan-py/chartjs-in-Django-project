@@ -1,8 +1,8 @@
-    var bgColorGreen = 'rgba(75, 192, 192, 0.2)';
-    var colorGreen = 'rgba(75, 192, 192, 1)';
+var bgColorGreen = 'rgba(96, 150, 220, 0.5)';
+var colorGreen = 'rgba(96, 150, 220, 1)';
 
-    var bgColorRed = 'rgba(255, 99, 132, 0.2)';
-    var colorRed = 'rgba(255, 99, 132, 1)';
+var bgColorRed = 'rgba(254, 213, 86, 0.5)';
+var colorRed = 'rgba(254, 213, 86, 1)';
 
     const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -65,7 +65,15 @@
                 backgroundColor: bgColorGreen,
                 borderColor: colorGreen,
                 borderWidth: 1
-            }]
+              },
+              {
+                label: 'Previous Year',
+                data: colmunChartData.data_previous_year,
+                backgroundColor: bgColorRed,
+                borderColor: colorRed,
+                borderWidth: 1
+              }
+            ]
         },
         options: {
             plugins: {
