@@ -33,6 +33,8 @@ def dashboard(request):
 
     ############# get donation data by month #############
     def get_monthly_donation_data(year):
+        monthly_totals_dict = {month: {'total_amount': 0, 'total_count': 0} for month in range(1, 13)}
+
         monthly_totals = Donation.objects.filter(date__year=year).annotate(
             month=ExtractMonth('date')
         ).values('month').annotate(
@@ -40,12 +42,18 @@ def dashboard(request):
             total_count=Count('id')
         ).order_by('month')
 
-        months = list(monthly_totals.values_list('month', flat=True))
-        amounts = list(monthly_totals.values_list('total_amount', flat=True))
-        amounts_float = [float(amount) for amount in amounts]
-        counts = list(monthly_totals.values_list('total_count', flat=True))
+        for data in monthly_totals:
+            month = data['month']
+            monthly_totals_dict[month] = {
+                'total_amount': float(data['total_amount']),
+                'total_count': data['total_count']
+            }
 
-        return months, amounts_float, counts
+        months = list(monthly_totals_dict.keys())
+        amounts = [monthly_totals_dict[month]['total_amount'] for month in months]
+        counts = [monthly_totals_dict[month]['total_count'] for month in months]
+
+        return months, amounts, counts
 
 
     monthly_donation_data_current_year = get_monthly_donation_data(current_year)
