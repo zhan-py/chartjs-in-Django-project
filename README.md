@@ -1,0 +1,1 @@
+These files are from a group project completed by five team members for Bethany Baptist Church, and I designed and implemented the database, [dashboard](https://zhan-py.github.io/donation-dashboard/) and some front-end features.
